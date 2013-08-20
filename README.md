@@ -19,7 +19,28 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+create table mydocs (id uuid, attributes hstore);
+
+```ruby
+class MyDocStorage < HstoredDocument
+end
+
+id = UUID.generate
+doc = {id: id, prop1: 'val1', prop2: [1, 2, 3], prop3: [{nprop: 'nval'}]}
+
+store = MyDocStorage
+
+store.store(doc)
+store.find(id).should == doc
+
+store.where('doc.prop2' => 3, prop1: 'val1')
+store.where('doc.prop3.nprop' => 'nval')
+
+store.store(doc.merge(propr1: 'changed1'))
+store.find(id)[:prop1].should == 'changed1'
+store.delete(id)
+
+```
 
 ## Contributing
 
